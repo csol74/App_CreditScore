@@ -2,11 +2,10 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
-import tensorflow as tf
-from tensorflow.keras.models import load_model
+import keras
+from keras.models import load_model
 import joblib
 import os
-
 # ─────────────────────────────────────────────
 # CONFIGURACIÓN DE PÁGINA
 # ─────────────────────────────────────────────
