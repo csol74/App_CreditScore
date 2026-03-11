@@ -2,10 +2,11 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
-import keras
-from keras.models import load_model
+import tensorflow as tf
+from tensorflow.keras.models import load_model
 import joblib
 import os
+
 # ─────────────────────────────────────────────
 # CONFIGURACIÓN DE PÁGINA
 # ─────────────────────────────────────────────
@@ -97,7 +98,6 @@ st.title("💳 Predictor de Credit Score")
 st.markdown("Ingresa los datos del cliente para predecir su categoría de crédito.")
 st.markdown("---")
 
-# Verificar archivos
 if model is None:
     st.error("⚠️ No se encontró `modelo_ANN_multiclass_M2.keras`. Colócalo en la misma carpeta.")
     st.stop()
