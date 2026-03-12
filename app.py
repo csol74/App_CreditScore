@@ -51,8 +51,6 @@ OPCIONES = {
         "High_spent_Medium_value_payments", "Low_spent_Small_value_payments",
         "High_spent_Large_value_payments", "Low_spent_Medium_value_payments"
     ],
-    "Month": ["January", "February", "March", "April", "May", "June",
-              "July", "August", "September", "October", "November", "December"]
 }
 
 def encode_categoricals(row_dict):
@@ -119,7 +117,6 @@ with col1:
     st.markdown("**👤 Datos Personales**")
     age             = st.number_input("Edad", min_value=18, max_value=100, value=35)
     occupation      = st.selectbox("Ocupación", OPCIONES["Occupation"])
-    month           = st.selectbox("Mes", OPCIONES["Month"])
     annual_income   = st.number_input("Ingreso Anual (USD)", min_value=0.0, value=50000.0, step=1000.0)
     monthly_salary  = st.number_input("Salario Mensual Neto (USD)", min_value=0.0, value=4000.0, step=100.0)
     monthly_balance = st.number_input("Balance Mensual (USD)", min_value=-10000.0, value=500.0, step=100.0)
@@ -127,22 +124,26 @@ with col1:
 
 with col2:
     st.markdown("**🏦 Cuentas y Créditos**")
-    num_bank_accounts  = st.number_input("Nº Cuentas Bancarias", min_value=0, max_value=20, value=2)
-    num_credit_card    = st.number_input("Nº Tarjetas de Crédito", min_value=0, max_value=20, value=3)
-    num_of_loan        = st.number_input("Nº de Préstamos", min_value=0, max_value=20, value=1)
-    outstanding_debt   = st.number_input("Deuda Pendiente (USD)", min_value=0.0, value=5000.0, step=100.0)
-    credit_utilization = st.number_input("Ratio Utilización Crédito (%)", min_value=0.0, max_value=100.0, value=30.0)
-    total_emi          = st.number_input("Total EMI por Mes (USD)", min_value=0.0, value=300.0, step=50.0)
-    credit_history_age = st.number_input("Antigüedad Historial Crédito (años)", min_value=0.0, value=5.0, step=0.5)
+    num_bank_accounts    = st.number_input("Nº Cuentas Bancarias", min_value=0, max_value=20, value=2)
+    num_credit_card      = st.number_input("Nº Tarjetas de Crédito", min_value=0, max_value=20, value=3)
+    num_of_loan          = st.number_input("Nº de Préstamos", min_value=0, max_value=20, value=1)
+    outstanding_debt     = st.number_input("Deuda Pendiente (USD)", min_value=0.0, value=5000.0, step=100.0)
+    credit_utilization   = st.number_input("Ratio Utilización Crédito (%)", min_value=0.0, max_value=100.0, value=30.0)
+    total_emi            = st.number_input("Total EMI por Mes (USD)", min_value=0.0, value=300.0, step=50.0)
+    credit_history_age   = st.number_input("Antigüedad Historial Crédito (años)", min_value=0.0, value=5.0, step=0.5)
+    # ✅ Feature que faltaba
+    changed_credit_limit = st.number_input("Cambio en Límite de Crédito (USD)", min_value=-10000.0, value=0.0, step=100.0)
 
 with col3:
     st.markdown("**⚠️ Historial de Pagos**")
-    interest_rate       = st.number_input("Tasa de Interés Promedio (%)", min_value=0.0, max_value=50.0, value=15.0)
-    delay_from_due      = st.number_input("Días de Retraso Promedio", min_value=0, max_value=180, value=10)
-    num_delayed_payment = st.number_input("Nº Pagos Retrasados", min_value=0, max_value=50, value=5)
-    credit_mix          = st.selectbox("Mezcla de Crédito", OPCIONES["Credit_Mix"])
-    payment_min         = st.selectbox("¿Paga el Mínimo?", OPCIONES["Payment_of_Min_Amount"])
-    payment_behaviour   = st.selectbox("Comportamiento de Pago", OPCIONES["Payment_Behaviour"])
+    interest_rate        = st.number_input("Tasa de Interés Promedio (%)", min_value=0.0, max_value=50.0, value=15.0)
+    delay_from_due       = st.number_input("Días de Retraso Promedio", min_value=0, max_value=180, value=10)
+    num_delayed_payment  = st.number_input("Nº Pagos Retrasados", min_value=0, max_value=50, value=5)
+    # ✅ Feature que faltaba
+    num_credit_inquiries = st.number_input("Nº Consultas de Crédito", min_value=0, max_value=50, value=2)
+    credit_mix           = st.selectbox("Mezcla de Crédito", OPCIONES["Credit_Mix"])
+    payment_min          = st.selectbox("¿Paga el Mínimo?", OPCIONES["Payment_of_Min_Amount"])
+    payment_behaviour    = st.selectbox("Comportamiento de Pago", OPCIONES["Payment_Behaviour"])
 
 st.markdown("---")
 
@@ -151,8 +152,9 @@ st.markdown("---")
 # ─────────────────────────────────────────────
 if st.button("🔍 Predecir Credit Score", use_container_width=True, type="primary"):
 
+    # ❌ Se eliminó "Month" — no estaba en el scaler
+    # ✅ Se agregaron "Changed_Credit_Limit" y "Num_Credit_Inquiries"
     datos_raw = {
-        "Month":                    month,
         "Age":                      age,
         "Occupation":               occupation,
         "Annual_Income":            annual_income,
@@ -163,6 +165,8 @@ if st.button("🔍 Predecir Credit Score", use_container_width=True, type="prima
         "Num_of_Loan":              num_of_loan,
         "Delay_from_due_date":      delay_from_due,
         "Num_of_Delayed_Payment":   num_delayed_payment,
+        "Changed_Credit_Limit":     changed_credit_limit,
+        "Num_Credit_Inquiries":     num_credit_inquiries,
         "Credit_Mix":               credit_mix,
         "Outstanding_Debt":         outstanding_debt,
         "Credit_Utilization_Ratio": credit_utilization,
